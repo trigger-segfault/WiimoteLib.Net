@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A0DCBDCC-22CE-42A6-BB3A-34DBB4FC606F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>WiimoteController</RootNamespace>
+    <AssemblyName>WiimoteController</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DUMMY_INPUT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Management.Instrumentation" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsInput, Version=1.0.6.0, Culture=neutral, PublicKeyToken=de2685b4776e9c2e, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulatorPlus.1.0.7\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\WiimoteDisplay.xaml.cs">
+      <DependentUpon>WiimoteDisplay.xaml</DependentUpon>
+    </Compile>
+    <None Include="OverlayOption.xaml.cs">
+      <DependentUpon>OverlayOption.xaml</DependentUpon>
+    </None>
+    <Compile Include="OverlayOption.cs" />
+    <Compile Include="OverlayWindow.xaml.cs">
+      <DependentUpon>OverlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util\TaskExtensions.cs" />
+    <Page Include="Controls\WiimoteDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Input\Dummy\DummyInputDeviceStateAdaptor.cs" />
+    <Compile Include="Input\Dummy\DummyInputSimulator.cs" />
+    <Compile Include="Input\Dummy\DummyKeyboardSimulator.cs" />
+    <Compile Include="Input\Dummy\DummyMouseSimulator.cs" />
+    <Compile Include="Input\InputAnalogs.cs" />
+    <Compile Include="Input\InputControl.cs" />
+    <Compile Include="Input\InputButtons.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="OverlayOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <Page Include="OverlayWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Pairing\BLUETOOTH_DEVICE_INFO.cs" />
+    <None Include="Pairing\BLUETOOTH_DEVICE_SEARCH_PARAMS.cs" />
+    <None Include="Pairing\BLUETOOTH_FIND_RADIO_PARAMS.cs" />
+    <None Include="Pairing\BLUETOOTH_RADIO_INFO.cs" />
+    <None Include="Pairing\IP_ADDRESS_STRING.cs" />
+    <None Include="Pairing\IP_ADDR_STRING.cs" />
+    <None Include="Pairing\Manufacturer.cs" />
+    <None Include="Pairing\NativeMethods.cs" />
+    <None Include="Pairing\IP_ADAPTER_INFO.cs" />
+    <None Include="Pairing\SYSTEMTIME.cs" />
+    <None Include="Pairing\WiimoteAutoPairer.cs" />
+    <None Include="Pairing\WiimotePairing.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WiimoteLib\WiimoteLib.csproj">
+      <Project>{37a555df-7012-4b99-8a47-1c922a361e52}</Project>
+      <Name>WiimoteLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\LED1.png" />
+    <Resource Include="Resources\Wiimote\LED2.png" />
+    <Resource Include="Resources\Wiimote\LED3.png" />
+    <Resource Include="Resources\Wiimote\LED4.png" />
+    <Resource Include="Resources\Wiimote\Nunchuk.png" />
+    <Resource Include="Resources\Wiimote\NunchukDisconnected.png" />
+    <Resource Include="Resources\Wiimote\NunchukDisconnected2.png" />
+    <Resource Include="Resources\Wiimote\Wiimote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pairing\Internal\" />
+    <Folder Include="Resources\Icons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\AGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\BGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\CGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\DPadGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\HomeGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED1Glow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED2Glow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED3Glow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED4Glow.png" />
+    <Resource Include="Resources\Wiimote\Glows\MinusGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\OneGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\PlusGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\PowerGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\StickGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\TwoGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\ZGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED1OffGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED2OffGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED3OffGlow.png" />
+    <Resource Include="Resources\Wiimote\Glows\LED4OffGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\WiimoteStandalone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\WiimoteStandaloneNoB.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

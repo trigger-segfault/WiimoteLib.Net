@@ -1,0 +1,268 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{37A555DF-7012-4B99-8A47-1C922A361E52}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WiimoteLib</RootNamespace>
+    <AssemblyName>WiimoteLib</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'MSRS Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\MSRS Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'MSRS Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\MSRS Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug MSRS|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug MSRS\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MSRS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug MSRS|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug MSRS\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MSRS|AnyCPU' ">
+    <OutputPath>bin\Release MSRS\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release MSRS|x86' ">
+    <OutputPath>bin\x86\Release MSRS\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Devices\BluetoothAddress.cs" />
+    <Compile Include="Devices\BluetoothDeviceInfo.cs" />
+    <Compile Include="Devices\HIDDeviceInfo.cs" />
+    <Compile Include="Devices\WiimoteDeviceInfo.cs" />
+    <Compile Include="Events\Events.cs" />
+    <Compile Include="Events\Exceptions.cs" />
+    <None Include="Native\HIDapi.cs" />
+    <Compile Include="Helpers\ADPCMConverter.cs" />
+    <Compile Include="Helpers\ADPCMReader.cs" />
+    <Compile Include="Helpers\ATimer.cs" />
+    <Compile Include="Helpers\MicroTimer.cs" />
+    <Compile Include="Helpers\MultimediaTimer.cs" />
+    <Compile Include="Helpers\RiffReader.cs" />
+    <Compile Include="Helpers\Speaker.cs" />
+    <Compile Include="Helpers\WaveReader.cs" />
+    <Compile Include="Native\Manufacturer.cs" />
+    <Compile Include="Native\Uuids.cs" />
+    <Compile Include="Helpers\Registers.cs" />
+    <Compile Include="Native\Windows\DeviceManagementMessage.cs" />
+    <Compile Include="Native\Windows\DeviceManagementMessage2.cs" />
+    <Compile Include="Native\Windows\DeviceManagementStructures.cs" />
+    <Compile Include="Native\Windows\WindowsMessage.cs" />
+    <Compile Include="Util\LockTracker.cs" />
+    <Compile Include="WiimoteManager.WndProc.cs" />
+    <Compile Include="WiimoteOld\DataTypes.cs" />
+    <Compile Include="DataTypes\AccelCalibrationInfo.cs" />
+    <Compile Include="DataTypes\AccelState.cs" />
+    <Compile Include="DataTypes\ButtonState.cs" />
+    <Compile Include="DataTypes\Unused\ClassicControllerCalibrationInfo.cs" />
+    <Compile Include="DataTypes\Unused\ClassicControllerButtonState.cs" />
+    <Compile Include="DataTypes\Unused\ClassicControllerState.cs" />
+    <Compile Include="DataTypes\ExtensionType.cs" />
+    <Compile Include="DataTypes\LEDs.cs" />
+    <Compile Include="DataTypes\MotionPlusCalibrationInfo.cs" />
+    <Compile Include="DataTypes\StatusState.cs" />
+    <Compile Include="DataTypes\IRMode.cs" />
+    <Compile Include="DataTypes\IRSensitivity.cs" />
+    <Compile Include="DataTypes\IRSensor.cs" />
+    <Compile Include="DataTypes\IRState.cs" />
+    <Compile Include="DataTypes\LastReadStatus.cs" />
+    <Compile Include="DataTypes\LEDState.cs" />
+    <Compile Include="DataTypes\MotionPlusState.cs" />
+    <Compile Include="DataTypes\NunchukCalibrationInfo.cs" />
+    <Compile Include="DataTypes\NunchukState.cs" />
+    <Compile Include="DataTypes\WiimoteState.cs" />
+    <Compile Include="Events\OldEvents.cs" />
+    <Compile Include="Geometry\MathUtils.cs" />
+    <Compile Include="Geometry\PitchYawRollF.cs" />
+    <Compile Include="Geometry\PitchYawRollI.cs" />
+    <Compile Include="Geometry\Point2F.cs" />
+    <Compile Include="Geometry\Point2I.cs" />
+    <Compile Include="Geometry\Point3F.cs" />
+    <Compile Include="Geometry\Point3I.cs" />
+    <Compile Include="Native\NativeEnums.cs" />
+    <Compile Include="Native\NativeMethods.cs" />
+    <Compile Include="Native\NativeStructures.cs" />
+    <Compile Include="Helpers\ReportEnums.cs" />
+    <Compile Include="Util\BitExtensions.cs" />
+    <Compile Include="Util\EnumInfo.cs" />
+    <Compile Include="Util\TaskExtensions.cs" />
+    <None Include="WiimoteOld\WiimoteOld.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="WiimoteOld\WiimoteOld.Parsing.cs" />
+    <None Include="WiimoteOld\WiimoteOld.IO.cs" />
+    <None Include="WiimoteOld\WiimoteOld.Settings.cs" />
+    <None Include="WiimoteOld\WiimoteCollection.cs" />
+    <Compile Include="Helpers\WiimoteConstants.cs" />
+    <Compile Include="Helpers\WiimoteEnums.cs" />
+    <Compile Include="WiimoteManager.cs" />
+    <Compile Include="WiimoteManager.Events.cs" />
+    <Compile Include="WiimoteManager.Tasks.cs" />
+    <Compile Include="Wiimote.cs" />
+    <Compile Include="Wiimote.Events.cs" />
+    <Compile Include="Wiimote.IO.cs" />
+    <Compile Include="Wiimote.Parsing.cs" />
+    <Compile Include="Wiimote.Settings.cs" />
+    <Compile Include="Helpers\WiimoteRegistry.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\APIHelp\AdditionalContent\changes.topic" />
+    <Content Include="docs\copyright.txt" />
+    <Content Include="docs\license.txt" />
+    <Content Include="docs\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\APIHelp\AdditionalContent\copyright.topic" />
+    <None Include="docs\APIHelp\AdditionalContent\license.topic" />
+    <None Include="docs\APIHelp\AdditionalContent\overview.topic" />
+    <None Include="docs\APIHelp\Help\WiimoteLib.chm" />
+    <None Include="docs\APIHelp\WiimoteLib.shfb" />
+    <None Include="docs\APIHelp\WiimoteLib.sitemap" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

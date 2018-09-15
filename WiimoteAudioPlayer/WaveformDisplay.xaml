@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="WiimoteAudioPlayer.WaveformDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WiimoteAudioPlayer"
+             mc:Ignorable="d" 
+             Height="140"
+             d:DesignHeight="140" d:DesignWidth="300" UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Border x:Name="border" BorderThickness="1" BorderBrush="#FF555555">
+        <Border.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFEFEFE" Offset="0"/>
+                <GradientStop Color="#FFD2D3CE" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid x:Name="grid">
+            <local:WaveformRenderer x:Name="renderer"/>
+            <Rectangle x:Name="bar" Fill="Red" HorizontalAlignment="Left" Width="2"/>
+        </Grid>
+    </Border>
+</UserControl>
