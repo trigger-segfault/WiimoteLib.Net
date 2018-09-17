@@ -1,6 +1,6 @@
 # WiimoteLib.Net
 
-A modified version of WiimoteLib to support Audio playback among other things.
+A modified version of **[WiimoteLib](https://github.com/BrianPeek/WiimoteLib)** to support Audio playback among other things. **Note:** Google searches for WiimoteLib will return a fork of it over the original. Make sure you look for the original by Brian Peek as it is more up to date.
 
 This library is nowhere near a usable or even readable state. Many things are subject to change including the name of this project.
 
