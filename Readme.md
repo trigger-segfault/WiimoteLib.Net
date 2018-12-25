@@ -1,6 +1,7 @@
-# WiimoteLib.Net
+# WiimoteLib.Net (Name subject to change)
 
 [![Creation Date](https://img.shields.io/badge/created-september%202018-A642FF.svg?style=flat)](https://github.com/trigger-death/WiimoteLib.Net/commit/60207025642ca1221c452f9e014bf8d86d12aa70)
+[![Discord](https://img.shields.io/discord/436949335947870238.svg?style=flat&logo=discord&label=chat&colorB=7389DC&link=https://discord.gg/vB7jUbY)](https://discord.gg/vB7jUbY)
 
 A modified version of **[WiimoteLib](https://github.com/BrianPeek/WiimoteLib)** to support Audio playback among other things. **Note:** Google searches for WiimoteLib will return a fork of it over the original. Make sure you look for the original by Brian Peek as it is more up to date.
 
