@@ -137,8 +137,11 @@ namespace WiimoteAudioPlayer {
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e) {
-			WiimoteManager.AutoConnect = true;
+			//FIXME: AutoConnect/Unpair is broken on Windows 10, it'll cause
+			//       more problems than solve them at this point in time.
+			WiimoteManager.AutoConnect = false;// true;
 			WiimoteManager.DolphinBarMode = true;
+			WiimoteManager.BluetoothMode = true;
 			WiimoteManager.AutoDiscoveryCount = 1;
 			WiimoteManager.Connected += OnWiimoteConnected;
 			WiimoteManager.Disconnected += OnWiimoteDisconnected;

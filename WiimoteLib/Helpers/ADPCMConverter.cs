@@ -218,8 +218,11 @@ namespace WiimoteLib.Helpers {
 			Array.Copy(output, buffer, buffer.Length);
 		}
 
-		const string FFMpeg = @"C:\Programs\Tools\FFmpeg\ffmpeg.exe";
-		
+		//FIXME: Quick fix for dumb FFmpeg hardcoded location.
+		//       For now it must either be in the Windows %PATH%, or your program directory.
+		//That's awful, absolutely awful.
+		const string FFMpeg = "ffmpeg.exe";
+
 		public static bool MaximizeWavVolume(string inputFile, out string outputFile) {
 			RiffTags riff = new RiffTags(inputFile);
 			// Remove unnecissary tags

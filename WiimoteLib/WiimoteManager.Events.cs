@@ -27,7 +27,8 @@ namespace WiimoteLib {
 		private static bool RaiseDiscovered(BluetoothDeviceInfo bt, HIDDeviceInfo hid) {
 			Debug.WriteLine($"{bt} Discovered");
 			WiimoteDeviceInfo device;
-			if (bt == null && DolphinBarMode)
+			//FIXME: Quick fix to support both Bluetooth and DolphinBar connections.
+			if (bt == null)// && DolphinBarMode)
 				device = new WiimoteDeviceInfo(hid, true);
 			else
 				device = new WiimoteDeviceInfo(bt, hid);

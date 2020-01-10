@@ -89,9 +89,13 @@ namespace WiimoteController.Input {
 			WiimoteManager.Connected += OnWiimoteConnected;
 			WiimoteManager.Discovered += OnWiimoteDiscovered;
 			WiimoteManager.AutoDiscoveryCount = 1;
-			WiimoteManager.UnpairOnDisconnect = true;
+			//FIXME: AutoConnect/Unpair is broken on Windows 10, it'll cause
+			//       more problems than solve them at this point in time.
+			WiimoteManager.UnpairOnDisconnect = false;// true;
 			WiimoteManager.AutoConnect = false;
+			//TODO: This control REALLY should not be messing with static settings. BAD!
 			WiimoteManager.DolphinBarMode = true;
+			WiimoteManager.BluetoothMode = true;
 			WiimoteManager.StartDiscovery();
 		}
 

@@ -42,9 +42,12 @@ namespace ReportInspector {
 			Close();
 			return;*/
 
-			WiimoteManager.AutoConnect = true;
+			//FIXME: AutoConnect/Unpair is broken on Windows 10, it'll cause
+			//       more problems than solve them at this point in time.
+			WiimoteManager.AutoConnect = false;// true;
 			WiimoteManager.AutoDiscoveryCount = 1;
 			WiimoteManager.DolphinBarMode = true;
+			WiimoteManager.BluetoothMode = true;
 			WiimoteManager.Connected += OnWiimoteConnected;
 
 			using (FileStream stream = File.OpenRead(@"C:\Users\Onii-chan\My Projects\Dolphin\Binary\x64\Wiimote - Copy.logdat")) {

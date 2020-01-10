@@ -41,7 +41,10 @@ namespace WiimoteLib {
 		private static Task writeTask;
 		private static readonly AutoResetEvent writeReady = new AutoResetEvent(false);
 
-		public static bool DolphinBarMode { get; set; }
+		//FIXME: Quick fix to support both Bluetooth and DolphinBar connections.
+		//       This probably shouldn't be static.
+		public static bool DolphinBarMode { get; set; } = false;
+		public static bool BluetoothMode { get; set; } = true;
 
 		/// <summary>Initializes the Wiimote manager.</summary>
 		static WiimoteManager() {
@@ -159,11 +162,20 @@ namespace WiimoteLib {
 		/// <param name="address">The address of the Wiimote.</param>
 		/// <returns>The created Wiimote.</returns>
 		public static Wiimote Connect(string devicePath) {
+			return Connect(devicePath, DolphinBarMode);
+		}
+
+		/// <summary>Connects the Wiimote with the specified address.</summary>
+		/// <param name="address">The address of the Wiimote.</param>
+		/// <returns>The created Wiimote.</returns>
+		public static Wiimote Connect(string devicePath, bool dolphinBarMode) {
+			//FIXME: Quick fix to support both Bluetooth and DolphinBar connections.
+			//       Determine a better public implementation.
 			lock (wiimotes) {
 				Wiimote connected = wiimotes.Find(wm => wm.DevicePath == devicePath);
 				if (connected != null)
 					throw new WiimoteAlreadyConnectedException(connected, devicePath);
-				return Connect(new WiimoteDeviceInfo(devicePath, DolphinBarMode));
+				return Connect(new WiimoteDeviceInfo(devicePath, dolphinBarMode));
 			}
 		}
 

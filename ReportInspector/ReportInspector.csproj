@@ -99,9 +99,9 @@
     <Resource Include="App.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WiimoteLib\WiimoteLib.csproj">
+    <ProjectReference Include="..\WiimoteLib\TriggersTools.WiimoteConnect.csproj">
       <Project>{37a555df-7012-4b99-8a47-1c922a361e52}</Project>
-      <Name>WiimoteLib</Name>
+      <Name>TriggersTools.WiimoteConnect</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

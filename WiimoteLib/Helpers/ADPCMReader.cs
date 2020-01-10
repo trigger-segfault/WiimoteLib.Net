@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 namespace WiimoteLib.Helpers {
 	public static class ADPCMReader {
 
-		const string FFMpeg = @"C:\Programs\Tools\FFmpeg\ffmpeg.exe";
+		//FIXME: Quick fix for dumb FFmpeg hardcoded location.
+		//       For now it must either be in the Windows %PATH%, or your program directory.
+		//Stop it, that's unethical.
+		const string FFMpeg = "ffmpeg.exe";
 
 		public static byte[] ReadADPCM(string file, ref int convSampleRate) {
 			return ReadADPCM(file, ref convSampleRate, false);

@@ -47,10 +47,10 @@
                     <xctk:SingleUpDown x:Name="spinnerVolume" Value="1" Maximum="1" Minimum="0.01"  Height="24" Grid.Column="4" ValueChanged="OnVolumeChanged" Increment="0.05" DefaultValue="1" DisplayDefaultValueOnEmptyText="True" FormatString="0.000"/>
                 </Grid>
                 <Button x:Name="buttonUpdateSampleRate" Content="Update Changes" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnUpdateSettings" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonPlayWave" Content="Play Real" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayReal" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonPlayWiimote" Content="Play Wiimote" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayWiimote" IsEnabled="False" IsTabStop="False" Focusable="False"/>
+                <Button x:Name="buttonPlayWave" Content="Play on Computer" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayReal" IsEnabled="False" IsTabStop="False" Focusable="False"/>
+                <Button x:Name="buttonPlayWiimote" Content="Play on Wiimote" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayWiimote" IsEnabled="False" IsTabStop="False" Focusable="False"/>
                 <Button x:Name="buttonStop" Content="Stop Playback" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnStop" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonLoadSound" Content="Load Sound" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnLoadSound" IsEnabled="False" IsTabStop="False" Focusable="False"/>
+                <Button x:Name="buttonLoadSound" Content="Load Sound" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnLoadSound" IsEnabled="True" IsTabStop="False" Focusable="False"/>
             </StackPanel>
         </Grid>
         <Label x:Name="labelDrop" Content="Drop Sound Files Here" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#88FFFFFF" Opacity="0.8" FontSize="22" FontWeight="Bold" Visibility="Collapsed"/>

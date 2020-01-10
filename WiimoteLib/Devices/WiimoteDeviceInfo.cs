@@ -16,6 +16,10 @@ namespace WiimoteLib.Devices {
 
 		public WiimoteType Type { get; }
 
+		//FIXME: Quick fix to detect if we have a Bluetooth connection.
+		//       It works, but it doesn't feel like a good solution without
+		//       further documentation.
+		public bool IsBluetooth => !Bluetooth.Address.IsInvalid;
 		public BluetoothAddress Address => Bluetooth.Address;
 		public bool Connected => Bluetooth.Connected;
 		public bool Remembered => Bluetooth.Remembered;

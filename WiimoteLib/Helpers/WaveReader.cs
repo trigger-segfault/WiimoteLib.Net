@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 namespace WiimoteLib.Helpers {
 	public class WaveReader {
 
-		const string FFMpeg = @"C:\Programs\Tools\FFmpeg\ffmpeg.exe";
+		//FIXME: Quick fix for dumb FFmpeg hardcoded location.
+		//       For now it must either be in the Windows %PATH%, or your program directory.
+		//Just say NO to hardcoded paths.
+		const string FFMpeg = "ffmpeg.exe";
 
 		public static byte[] ReadPCM(string file, ref int convSampleRate) {
 			return ReadPCM(file, ref convSampleRate, false);

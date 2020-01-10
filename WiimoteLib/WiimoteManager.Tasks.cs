@@ -138,10 +138,17 @@ namespace WiimoteLib {
 		}
 
 		private static bool DiscoverLoop(CancellationToken token) {
+			//FIXME: Handle BOTH Bluetooth and DolphinBarMode more gracefully.
+			//if (DolphinBarMode)
+			//	return HIDDiscoverLoop(token);
+			//else
+			//	return BluetoothDiscoverLoop(token);
+			bool result = true;
 			if (DolphinBarMode)
-				return HIDDiscoverLoop(token);
-			else
-				return BluetoothDiscoverLoop(token);
+				result &= HIDDiscoverLoop(token);
+			if (BluetoothMode)
+				result &= BluetoothDiscoverLoop(token);
+			return result;
 		}
 
 		private static bool HIDDiscoverLoop(CancellationToken token) {
@@ -156,7 +163,8 @@ namespace WiimoteLib {
 
 				if (wiimote == null) {
 					if (autoConnect) {
-						WiimoteDeviceInfo wiimoteDevice = new WiimoteDeviceInfo(hid, DolphinBarMode);
+						//FIXME: Handle BOTH Bluetooth and DolphinBarMode more gracefully.
+						WiimoteDeviceInfo wiimoteDevice = new WiimoteDeviceInfo(hid, true);// DolphinBarMode);
 						try {
 							Connect(wiimoteDevice);
 						}
@@ -254,10 +262,17 @@ namespace WiimoteLib {
 		}
 
 		private static bool IdleLoop(CancellationToken token) {
+			//FIXME: Handle BOTH Bluetooth and DolphinBarMode more gracefully.
+			//if (DolphinBarMode)
+			//	return HIDIdleLoop(token);
+			//else
+			//	return BluetoothIdleLoop(token);
+			bool result = true;
 			if (DolphinBarMode)
-				return HIDIdleLoop(token);
-			else
-				return BluetoothIdleLoop(token);
+				result &= HIDIdleLoop(token);
+			if (BluetoothMode)
+				result &= BluetoothIdleLoop(token);
+			return result;
 		}
 
 		private static bool HIDIdleLoop(CancellationToken token) {
@@ -268,6 +283,12 @@ namespace WiimoteLib {
 			foreach (Wiimote wiimote in wiimoteList) {
 				if (token.IsCancellationRequested)
 					return false;
+				//FIXME: Quick fix to support both Bluetooth and DolphinBar connections.
+				//       Notice, that we only continue when in Bluetooth mode, this ensures
+				//       Bluetooth devices are handled properly even if they were connected
+				//       otherwise.
+				if (wiimote.Device.IsBluetooth && BluetoothMode)
+					continue;
 				try {
 #if DEBUG
 					wiimote.GetStatus();
@@ -296,6 +317,9 @@ namespace WiimoteLib {
 			foreach (Wiimote wiimote in wiimoteList) {
 				if (token.IsCancellationRequested)
 					return false;
+				//FIXME: Quick fix to support both DolphinBar and Bluetooth connections.
+				if (!wiimote.Device.IsBluetooth)
+					continue;
 				BluetoothDeviceInfo device = wiimote.Device.Bluetooth;
 				Stopwatch watch2 = Stopwatch.StartNew();
 				device.Refresh();
