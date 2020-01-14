@@ -8,6 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WiimoteLib.Helpers {
+	[Flags]
+	public enum PCMFlags {
+		None = 0,
+		S8 = 0,
+		S16LE = (1 << 0),
+		S16BE = (1 << 1),
+		//S16 = S16LE|S16BE,
+		Stereo = 0,
+		MonoL = (1 << 2),
+		MonoR = (1 << 3),
+		MonoLR = MonoL|MonoR,
+		//Mono = MonoL|MonoR,
+		Interleave = 0,
+		Deinterleave = (1 << 4),
+
+	}
 	/// <summary>
 	/// https://github.com/losinggeneration/kos/blob/master/utils/wav2adpcm/wav2adpcm.c
 	/// </summary>
@@ -159,8 +175,8 @@ namespace WiimoteLib.Helpers {
 		}
 
 		public static void ADPCM2PCM(short[] dst, int dstIndex, byte[] src, int srcIndex, int length) {
-			int signal = 0;
-			int step = 0x7f;
+			int signal = 0; //int j = 0;
+			int step = 0x7f; //int k = 127;
 
 			do {
 				int data, val;
@@ -279,7 +295,7 @@ namespace WiimoteLib.Helpers {
 			byte[] wavData = new byte[wavSamples.Length * sizeof(short)];
 			Buffer.BlockCopy(wavSamples, 0, wavData, 0, wavData.Length);
 
-			outputFile = Path.Combine(Directory.GetCurrentDirectory(), "maximized.wav");
+			outputFile = Path.Combine(Directory.GetCurrentDirectory(), "wiimote.maximized.wav");
 			riff["data"] = new RiffTag("data", wavData);
 			riff.Save(outputFile);
 			return false;
@@ -312,7 +328,7 @@ namespace WiimoteLib.Helpers {
 				return false;
 			}
 			catch (Exception) {
-				outputFile = Path.Combine(Directory.GetCurrentDirectory(), "converted.wav");
+				outputFile = Path.Combine(Directory.GetCurrentDirectory(), "wiimote.converted.wav");
 				ProcessStartInfo startInfo = new ProcessStartInfo {
 					FileName = FFMpeg,
 					Arguments = $"-i \"{inputFile}\" -y -acodec pcm_s16le -ar {sampleRate} -ac 2 \"{outputFile}\"",
@@ -402,6 +418,138 @@ namespace WiimoteLib.Helpers {
 
 			sampleRate = fmt.SampleRate;
 			return adpcm;
+		}
+
+		public static byte[] Wav2PCMs8Data(string inputFile, out int sampleRate) {
+			using (FileStream input = File.OpenRead(inputFile))
+				return Wav2PCMs8Data(input, out sampleRate);
+		}
+		public const PCMFlags pf =	PCMFlags.S8 |
+									PCMFlags.Stereo |
+									PCMFlags.Interleave;
+
+		public static byte[] Wav2PCMs8Data(Stream input, out int sampleRate) {
+			RiffTags riff = new RiffTags(input);
+			// Remove unnecissary tags
+			foreach (string key in riff.Keys.ToArray()) {
+				if (key != "fmt " && key != "data")
+					riff.Remove(key);
+			}
+
+			if (riff.FileType != "WAVE")
+				throw new Exception("Input is not a WAVE file!");
+
+			WaveFmt fmt = WaveFmt.Read(riff["fmt "].Data);
+			if (fmt.Format != 1)
+				throw new Exception("Input is not PCM format!");
+			if (fmt.Channels != 2)
+				throw new Exception("Input does not have 2 channels!");
+			if (fmt.BitsPerSample != 16)
+				throw new Exception("Input does not have 16 bits per sample!");
+
+			byte[] data = riff["data"].Data;
+			short[] wavSamples = new short[data.Length / 2];
+			Buffer.BlockCopy(data, 0, wavSamples, 0, data.Length);
+
+			int pcmLength = data.Length / 2;
+			if (pf.HasFlag(PCMFlags.S16LE) || pf.HasFlag(PCMFlags.S16BE)) pcmLength *= 2;
+			if (pf.HasFlag(PCMFlags.MonoL) || pf.HasFlag(PCMFlags.MonoR)) pcmLength /= 2;
+			byte[] pcm = new byte[pcmLength];
+
+			if (pf.HasFlag(PCMFlags.Deinterleave)) {
+				Deinterleave(wavSamples);
+			}
+
+			for (int w = 0, p = 0; w < wavSamples.Length; w+=2, p+=2) {
+				short sample = 0;
+				if (pf.HasFlag(PCMFlags.MonoLR)) {
+					sample = (short) ((wavSamples[w+0] + wavSamples[w+1]) / 2);
+				}
+				else if (pf.HasFlag(PCMFlags.MonoR)) {
+					sample = wavSamples[w+1];
+				}
+				else if (pf.HasFlag(PCMFlags.MonoL)) {
+					sample = wavSamples[w+0];
+				}
+				else {
+					sample = wavSamples[w];
+					w--;
+				}
+				
+				if (pf.HasFlag(PCMFlags.S16LE)) {
+					//Signed 16-bit LITTLE ENDIAN:
+					pcm[p+0] = unchecked((byte) (sample & 0xFF));
+					pcm[p+1] = unchecked((byte) ((sample >> 8) & 0xFF));
+				}
+				else if (pf.HasFlag(PCMFlags.S16BE)) {
+					//Signed 16-bit BIG ENDIAN:
+					pcm[p+0] = unchecked((byte) ((sample >> 8) & 0xFF));
+					pcm[p+1] = unchecked((byte) (sample & 0xFF));
+				}
+				else {
+					//Signed 8-bit:
+					pcm[p] = unchecked((byte) ((sample >> 8) & 0xFF));
+					p--;
+				}
+			}
+
+
+
+			/*int outSampleCount = wavSamples
+			//byte[] pcm = new byte[data.Length / 2];//;
+			bool? s16e = true;// null;
+			//s16e (stereo)
+			if (s16e.HasValue)
+				pcm = new byte[data.Length];
+			//pcm = new byte[data.Length];
+			//s16e = true;
+			//s8 (stereo)
+			//pcm = new byte[data.Length / 2];
+			//byte[] pcm = new byte[data.Length / 4];
+			Buffer.BlockCopy(data, 0, wavSamples, 0, data.Length);
+
+			//Deinterleave(wavSamples);
+			//PCM2ADPCM(adpcm, 0, wavSamples, 0, adpcm.Length / 2);
+			//PCM2ADPCM(adpcm, adpcm.Length / 2, wavSamples, wavSamples.Length / 2, adpcm.Length / 2);
+			PCM2PCMs82(pcm, 0, wavSamples, 0, s16e);*/
+
+			sampleRate = fmt.SampleRate;
+			return pcm;
+		}
+
+		private static void PCM2PCMs82(byte[] dst, int dstIndex, short[] src, int srcIndex, bool? s16e = null) {
+			if (!s16e.HasValue) {
+				for (int i = 0; i < src.Length; i++) {
+					//BIG ENDIAN:
+					//dst[i * 2 + 0] = (byte) ((src[i] >> 8) & 0xFF);
+					//dst[i * 2 + 1] = (byte) (src[i] & 0xFF);
+					//LITTLE ENDIAN:
+					//Signed 8-bit PCM (stereo)
+					dst[i] = unchecked((byte) ((src[i] >> 8) & 0xFF));
+					//dst[i * 2 + 0] = (byte) (src[i] & 0xFF);
+					//dst[i * 2 + 1] = (byte) ((src[i] >> 8) & 0xFF);
+				}
+			}
+			else if (s16e.Value) {
+				for (int i = 0; i < src.Length; i++) {
+					//BIG ENDIAN:
+					//dst[i * 2 + 0] = (byte) ((src[i] >> 8) & 0xFF);
+					//dst[i * 2 + 1] = (byte) (src[i] & 0xFF);
+					//LITTLE ENDIAN:
+					dst[i * 2 + 0] = (byte) (src[i] & 0xFF);
+					dst[i * 2 + 1] = (byte) ((src[i] >> 8) & 0xFF);
+				}
+			}
+			else {
+				for (int i = 0; i < src.Length; i++) {
+					//BIG ENDIAN:
+					dst[i * 2 + 0] = (byte) ((src[i] >> 8) & 0xFF);
+					dst[i * 2 + 1] = (byte) (src[i] & 0xFF);
+					//LITTLE ENDIAN:
+					//dst[i * 2 + 0] = (byte) (src[i] & 0xFF);
+					//dst[i * 2 + 1] = (byte) ((src[i] >> 8) & 0xFF);
+				}
+			}
 		}
 
 		public static void Wav2ADPCM(string inputFile, string outputFile) {

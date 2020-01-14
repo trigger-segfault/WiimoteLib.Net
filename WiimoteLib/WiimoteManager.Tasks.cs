@@ -236,11 +236,13 @@ namespace WiimoteLib {
 						}
 					}
 					else if (device.IsDiscoverable() /*|| !device.Remembered*/) {
-						if (device.PairDevice(token)) {
-							anyPaired = true;
-						}
-						else {
-							Debug.WriteLine("{device} pair failed!");
+						if (pairOnDiscover) {
+							if (device.PairDevice(token)) {
+								anyPaired = true;
+							}
+							else {
+								Debug.WriteLine("{device} pair failed!");
+							}
 						}
 					}
 					else if (device.Remembered && unpairOnDisconnect) {

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WiimoteLib")]
-[assembly: AssemblyDescription("Managed library for the Nintendo Wiimote")]
+[assembly: AssemblyTitle("TriggersTools.WiimoteConnect")]
+[assembly: AssemblyDescription("A library for communicating with Wiimotes, based on Brian Peek's WiimoteLib")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Brian Peek (www.brianpeek.com)")]
-[assembly: AssemblyProduct("WiimoteLib")]
-[assembly: AssemblyCopyright("Copyright © 2009 Brian Peek (www.brianpeek.com)")]
+[assembly: AssemblyCompany("Trigger's Tools & Games")]
+[assembly: AssemblyProduct("TriggersTools.WiimoteConnect")]
+[assembly: AssemblyCopyright("Copyright © Robert Jordan 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.8.0.0")]
-[assembly: AssemblyFileVersion("1.8.0.0")]
+[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]

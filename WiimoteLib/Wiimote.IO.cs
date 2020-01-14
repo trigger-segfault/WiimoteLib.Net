@@ -305,18 +305,20 @@ namespace WiimoteLib {
 
 		public void EnableSpeaker(SpeakerConfiguration config) {
 			//using (AsyncReadState state = BeginAsyncRead()) {
-			byte[] buff = CreateReport(OutputReport.SpeakerEnable);
+			//byte[] buff = CreateReport(OutputReport.SpeakerEnable);
 			SetSpeakerEnabled(true);
 			SetSpeakerMuted(true);
 			WriteByte(Registers.Speaker1, 0x01);
-			WriteByte(Registers.SpeakerConfig, 0x80);
+			//WriteByte(Registers.SpeakerConfig, 0x80);
+			WriteByte(Registers.SpeakerConfig, 0x08);
 			WriteData(Registers.SpeakerConfig, 7, config.ToBytes());
 			/*WriteByte(Registers.Speaker1, 0x55);
 			WriteByte(Registers.SpeakerConfig, 0x08);
 			WriteData(Registers.SpeakerConfig, 7, config.ToBytes());
-			WriteByte(Registers.Speaker2, 0x01);*/
-			SetSpeakerMuted(false);
 			WriteByte(Registers.Speaker2, 0x01);
+			SetSpeakerMuted(false);*/
+			WriteByte(Registers.Speaker2, 0x01);
+			SetSpeakerMuted(false);
 			speakerConfig = config;
 			wiimoteState.Status.Speaker = true;
 			//}
@@ -330,6 +332,7 @@ namespace WiimoteLib {
 		private object speakerLock = new object();
 		private MicroTimer speakerTimer;
 		private byte[] speakerData;
+		//private PrebufferedSound speakerPrebuffered;
 		private Stream speakerStream;
 		private byte[] nextSpeakerReport;
 		private int speakerIndex;
@@ -341,6 +344,7 @@ namespace WiimoteLib {
 				speakerStream?.Close();
 				speakerStream = null;
 				speakerData = null;
+				//speakerPrebuffered = null;
 			}
 		}
 		public void PlayTone(int frequency, TimeSpan duration) {
@@ -369,6 +373,7 @@ namespace WiimoteLib {
 					int length = reader.ReadInt32();
 					speakerData = reader.ReadBytes(length);
 				}*/
+				//speakerPrebuffered = data;
 				speakerData = data;
 				//speakerData = new byte[20000000];
 				speakerIndex = 0;
@@ -383,6 +388,45 @@ namespace WiimoteLib {
 				//speakerWatch = Stopwatch.StartNew();
 			}
 		}
+		/*public void PlaySound(PrebufferedSound data) {
+			lock (speakerLock) {
+				if (disposed)
+					return;
+				speakerTimer?.Stop();
+				//var config = new SpeakerConfiguration(SpeakerFormat.PCM) {
+				//	Volume = .1f,
+				//	SampleRate = 4000,
+				//};
+				//EnableSpeaker(config);
+				speakerTimer = new MicroTimer(speakerConfig.MicrosecondsPerReport);
+				speakerTimer.MicroTimerElapsed += OnSpeakerTimerEllapsed;
+				Debug.WriteLine("Milliseconds Per Report: " + speakerConfig.MillisecondsPerReport);
+				//speakerTimer2 = new ATimer(3, speakerConfig.MillisecondsPerReport, OnSpeakerTimer2Ellapsed);
+				//}
+
+				//string path = @"C:\Users\Onii-chan\My Projects\C#\WiimoteController\WiimoteController\Resources\Oracle_Secret2Raw.wav";
+				//string path = @"C:\Users\Onii-chan\My Projects\C#\WiimoteController\WiimoteController\Resources\Oracle_Secret4.wav";
+				//using (FileStream stream = File.OpenRead(path)) {
+				//	BinaryReader reader = new BinaryReader(stream);
+				//	int length = reader.ReadInt32();
+				//	speakerData = reader.ReadBytes(length);
+				//}
+				//speakerPrebuffered;
+				speakerPrebuffered = data;
+				//speakerData = data;
+				//speakerData = new byte[20000000];
+				speakerIndex = 0;
+				NextSpeakerReport();
+				//for (int i = 0; i < 2000; i++) {
+				//	OnSpeakerTimer2Ellapsed();
+				//}
+				//Console.WriteLine("DONE");
+
+				speakerTimer.Start();
+				//speakerTimer2.Start();
+				//speakerWatch = Stopwatch.StartNew();
+			}
+		}*/
 		public void StreamSound(Stream stream) {
 
 		}
@@ -437,12 +481,25 @@ namespace WiimoteLib {
 		}
 
 		private bool NextSpeakerReport() {
+			//if (speakerPrebuffered != null) {
+				//nextSpeakerReport = speakerPrebuffered.getReport(speakerIndex/20);
+				//int length = nextSpeakerReport[1] >> 3;
+				//speakerIndex += length;
+
+			//	if (speakerIndex >= speakerPrebuffered.soundData.Length)
+			//		return true;
+			//	nextSpeakerReport = speakerPrebuffered.getReport(speakerIndex);
+			//	speakerIndex++;
+			//}
+			//else {
 			int length = Math.Min(20, speakerData.Length - speakerIndex);
 			if (length <= 0)
 				return true;
 			nextSpeakerReport = CreateReport(OutputReport.SpeakerData);
 			nextSpeakerReport[1] = (byte) (length << 3);
 			Buffer.BlockCopy(speakerData, speakerIndex, nextSpeakerReport, 2, length);
+			speakerIndex += length;
+			//}
 			//Random r = new Random();
 			/*for (int i = 0; i < length; i++) {
 				byte b = (byte) (speakerIndex % 20 < 10 ? 0x7F : 0x80);
@@ -457,7 +514,7 @@ namespace WiimoteLib {
 				else if (speakerIndex < 19)
 					nextSpeakerReport[i + 2] = 0x7F;
 			}*/
-			speakerIndex += length;
+			//speakerIndex += length;
 			return false;
 		}
 

@@ -49,9 +49,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -65,6 +62,9 @@
       <DependentUpon>WaveformDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="WaveformRenderer.cs" />
+    <Compile Include="WiimoteDisplay.xaml.cs">
+      <DependentUpon>WiimoteDisplay.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,6 +81,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WiimoteDisplay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -92,17 +96,106 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WiimoteController\WiimoteController.csproj">
-      <Project>{a0dcbdcc-22ce-42a6-bb3a-34dbb4fc606f}</Project>
-      <Name>WiimoteController</Name>
-    </ProjectReference>
+    <Resource Include="App.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\WiimoteLib\TriggersTools.WiimoteConnect.csproj">
       <Project>{37a555df-7012-4b99-8a47-1c922a361e52}</Project>
       <Name>TriggersTools.WiimoteConnect</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="App.ico" />
+    <Resource Include="Resources\Wiimote\Glows\AGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\BGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\CGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\DPadGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\HomeGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED1Glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED1OffGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED2Glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED2OffGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED3Glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED3OffGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED4Glow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\LED4OffGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\MinusGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\OneGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\PlusGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\PowerGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\StickGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\TwoGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Glows\ZGlow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\LED1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\LED2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\LED3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\LED4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Nunchuk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\NunchukDisconnected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\NunchukDisconnected2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\Wiimote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\WiimoteStandalone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Wiimote\WiimoteStandaloneNoB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Icons\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

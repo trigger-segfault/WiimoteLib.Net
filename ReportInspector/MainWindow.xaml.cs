@@ -42,9 +42,9 @@ namespace ReportInspector {
 			Close();
 			return;*/
 
-			//FIXME: AutoConnect/Unpair is broken on Windows 10, it'll cause
+			//FIXME: UnpairOnDisconnect is broken on Windows 10, it'll cause
 			//       more problems than solve them at this point in time.
-			WiimoteManager.AutoConnect = false;// true;
+			WiimoteManager.AutoConnect = true;
 			WiimoteManager.AutoDiscoveryCount = 1;
 			WiimoteManager.DolphinBarMode = true;
 			WiimoteManager.BluetoothMode = true;

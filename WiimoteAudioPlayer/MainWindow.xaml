@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiimoteAudioPlayer"
-        xmlns:local2="clr-namespace:WiimoteController.Controls;assembly=WiimoteController"
         xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
         Title="Wiimote Audio Player" Height="430" Width="500" Background="#FFF0F0F0" Icon="App.ico" UseLayoutRounding="True" SnapsToDevicePixels="True" ResizeMode="NoResize" AllowDrop="True" DragEnter="OnDragEnter" DragLeave="OnDragLeave" DragOver="OnDragOver" Drop="OnDrop" Loaded="OnLoaded" Closed="OnClosed">
+    <!--
+        xmlns:local2="clr-namespace:WiimoteController.Controls;assembly=WiimoteController"
+    -->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0"/>
@@ -25,14 +27,13 @@
             </Grid.ColumnDefinitions>
             <local:WaveformDisplay x:Name="waveform" Margin="5" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <Border BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="Auto" Margin="5" Grid.Column="1">
-                <local2:WiimoteDisplay x:Name="wmDisplay" Height="230" Width="Auto" />
+                <local:WiimoteDisplay x:Name="wmDisplay" Height="230" Width="Auto" />
             </Border>
             <Border x:Name="borderBattery" BorderBrush="DarkGray" Margin="5" Grid.Column="1" VerticalAlignment="Bottom" Height="20" BorderThickness="1" Background="#FF3C3C3C">
                 <Rectangle x:Name="rectBattery" Fill="LimeGreen" HorizontalAlignment="Left" />
             </Border>
             <StackPanel VerticalAlignment="Bottom" Margin="5,0,0,5">
                 <Label x:Name="labelFile" Content="File:" FontWeight="Regular" Margin="0,5,0,0"/>
-                <CheckBox x:Name="checkBoxMaximize" Content="Maximize Volume" Padding="4,-1,0,0" Margin="4,2,0,0" IsChecked="True" Click="OnMaximizeVolumeChanged" />
                 <Grid VerticalAlignment="Bottom" Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -41,16 +42,40 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="labelSampleRate" Content="Sample Rate:" Grid.Column="0" Grid.Row="2" FontWeight="Regular" Padding="5,4"/>
+                    <xctk:IntegerUpDown x:Name="spinnerSampleRate" Grid.Column="1" Grid.Row="2" Value="3000" Maximum="5000" Minimum="1000" Height="24" ValueChanged="OnSampleRateChanged" DefaultValue="3000" Increment="500" ToolTip="Recommended: ADPCM 3000Hz | PCM 1500Hz"/>
+                    <Label x:Name="labelVolume" Content="Volume:" Grid.Column="3" Grid.Row="2" FontWeight="Regular" Padding="5,4"/>
+                    <xctk:SingleUpDown x:Name="spinnerVolume" Grid.Column="4" Grid.Row="2" Value="1" Maximum="1" Minimum="0.01"  Height="24" ValueChanged="OnVolumeChanged" Increment="0.05" DefaultValue="1" DisplayDefaultValueOnEmptyText="True" FormatString="0.000" ToolTip="Recommended: ADPCM 1.0 | PCM 0.2-0.4"/>
+                    <CheckBox x:Name="checkBoxADPCM" Content="ADPCM" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Padding="4,-1,0,0" Margin="4,2,0,0" IsChecked="True" Click="OnADPCMChanged" HorizontalAlignment="Left" ToolTip="Checked: ADPCM format | Unchecked: PCM format" />
+                    <CheckBox x:Name="checkBoxMaximize" Content="Maximize Volume" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Padding="4,-1,0,0" Margin="4,2,0,0" IsChecked="True" Click="OnMaximizeVolumeChanged" HorizontalAlignment="Left" ToolTip="Recommended: ADPCM on | PCM off" />
+                </Grid>
+               <!-- <CheckBox x:Name="checkBoxMaximize" Content="Maximize Volume" Grid.Column="4" Padding="4,-1,0,0" Margin="4,2,0,0" IsChecked="True" Click="OnMaximizeVolumeChanged" />
+                <Grid VerticalAlignment="Bottom" Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     <Label x:Name="labelSampleRate" Content="Sample Rate:" FontWeight="Regular" Grid.Column="0" Padding="5,4"/>
                     <xctk:IntegerUpDown x:Name="spinnerSampleRate" Value="3000" Maximum="5000" Minimum="1000"  Height="24" Grid.Column="1" ValueChanged="OnSampleRateChanged" DefaultValue="3000" Increment="500"/>
                     <Label x:Name="labelVolume" Content="Volume:" FontWeight="Regular" Grid.Column="3" Padding="5,4"/>
                     <xctk:SingleUpDown x:Name="spinnerVolume" Value="1" Maximum="1" Minimum="0.01"  Height="24" Grid.Column="4" ValueChanged="OnVolumeChanged" Increment="0.05" DefaultValue="1" DisplayDefaultValueOnEmptyText="True" FormatString="0.000"/>
-                </Grid>
-                <Button x:Name="buttonUpdateSampleRate" Content="Update Changes" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnUpdateSettings" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonPlayWave" Content="Play on Computer" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayReal" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonPlayWiimote" Content="Play on Wiimote" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayWiimote" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonStop" Content="Stop Playback" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnStop" IsEnabled="False" IsTabStop="False" Focusable="False"/>
-                <Button x:Name="buttonLoadSound" Content="Load Sound" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnLoadSound" IsEnabled="True" IsTabStop="False" Focusable="False"/>
+                </Grid>-->
+                <Button x:Name="buttonUpdateSampleRate" Content="Update Changes" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnUpdateSettings" IsEnabled="False" IsTabStop="False" Focusable="False" ToolTip="Controls above with bold text require updating"/>
+                <Button x:Name="buttonPlayWave" Content="Play on Computer" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayReal" IsEnabled="False" IsTabStop="False" Focusable="False" ToolTip="Play converted audio through computer speakers (as PCM)"/>
+                <Button x:Name="buttonPlayWiimote" Content="Play on Wiimote" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnPlayWiimote" IsEnabled="False" IsTabStop="False" Focusable="False" ToolTip="Play converted audio through Wiimote speaker"/>
+                <Button x:Name="buttonStop" Content="Stop Playback" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnStop" IsEnabled="False" IsTabStop="False" Focusable="False" ToolTip="Stop audio playback on Wiimote or computer"/>
+                <Button x:Name="buttonLoadSound" Content="Load Sound" VerticalAlignment="Bottom" FontWeight="Bold" Height="28" Margin="0,5,0,0" Click="OnLoadSound" IsEnabled="True" IsTabStop="False" Focusable="False" ToolTip="You may also drag a sound file into the window"/>
             </StackPanel>
         </Grid>
         <Label x:Name="labelDrop" Content="Drop Sound Files Here" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#88FFFFFF" Opacity="0.8" FontSize="22" FontWeight="Bold" Visibility="Collapsed"/>

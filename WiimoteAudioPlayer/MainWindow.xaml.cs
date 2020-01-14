@@ -35,11 +35,15 @@ namespace WiimoteAudioPlayer {
 		private int sampleRate = 3000;
 		private float volume = 1f;
 		private bool maximize = true;
+		private int convertedSampleRate = 0;
 
+		private SpeakerFormat speakerFormat = SpeakerFormat.PCM;
 		private string waveFile;
 		private string convertedWaveFile;
 		private string finalWaveFile;
-		private byte[] adpcm;
+		private object soundObj;
+		//private byte[] soundData;
+		//private PrebufferedSound prebufferedSound;
 
 		private void OnLoadSound(object sender, RoutedEventArgs e) {
 			OpenFileDialog dialog = new OpenFileDialog {
@@ -50,17 +54,18 @@ namespace WiimoteAudioPlayer {
 		}
 
 		private void LoadSound(string newWaveFile) {
-			player.Close();
+			/*player.Close();
 			Wiimote?.StopSound();
 			waveform.Stop();
-			Thread.Sleep(300);
+			Thread.Sleep(300);*/
 
-			int newSampleRate = sampleRate;
-			string newConvertedWaveFile;
-			ADPCMConverter.ConvertToValidWav(newWaveFile, out newConvertedWaveFile, ref newSampleRate);
-			if (UpdateWaveFile(newConvertedWaveFile, newSampleRate, volume, maximize, true)) {
-				waveFile = newWaveFile;
-				labelFile.Content = "File: " + Path.GetFileName(waveFile);
+			//int newSampleRate = sampleRate;
+			//string newConvertedWaveFile;
+			//ADPCMConverter.ConvertToValidWav(newWaveFile, out newConvertedWaveFile, ref newSampleRate);
+			//if (PrepareWaveFile(newConvertedWaveFile, newSampleRate, volume, maximize, true)) {
+			if (PrepareWaveFile(newWaveFile, sampleRate, volume, maximize, speakerFormat, true)) {
+				//waveFile = newWaveFile;
+				labelFile.Content = "File: " + Path.GetFileName(newWaveFile);
 				buttonPlayWave.IsEnabled = true;
 				buttonPlayWiimote.IsEnabled = WiimoteManager.ConnectedWiimotes.Any();
 				buttonStop.IsEnabled = true;
@@ -77,13 +82,23 @@ namespace WiimoteAudioPlayer {
 
 		private void OnPlayWiimote(object sender, RoutedEventArgs e) {
 			player.Stop();
-			Wiimote?.EnableSpeaker(new SpeakerConfiguration {
+			SpeakerConfiguration config = new SpeakerConfiguration {
 				Volume = volume,
 				//Unknown2 = 0x0c,
 				//Unknown3 = 0x0e,
 				SampleRate = sampleRate,
-			});
-			Wiimote?.PlaySound(adpcm);
+				Format = speakerFormat,
+			};
+			Wiimote?.DisableSpeaker();
+			Wiimote?.EnableSpeaker(config);
+			Thread.Sleep(100);
+			Wiimote?.DisableSpeaker();
+			Wiimote?.EnableSpeaker(config);
+			//byte[] configData = Wiimote.ReadData(0x04a20001, 7);
+			//if (soundObj is PrebufferedSound prebuffered)
+			//	Wiimote?.PlaySound(prebuffered);
+			//else
+				Wiimote?.PlaySound((byte[]) soundObj);
 			waveform.Play();
 		}
 
@@ -96,7 +111,7 @@ namespace WiimoteAudioPlayer {
 		}
 
 		private void OnSampleRateChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-			if (IsLoaded && adpcm != null) {
+			if (IsLoaded && soundObj != null) {
 				labelSampleRate.FontWeight = SampleRateFontWeight;
 			}
 		}
@@ -137,12 +152,23 @@ namespace WiimoteAudioPlayer {
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e) {
-			//FIXME: AutoConnect/Unpair is broken on Windows 10, it'll cause
+			speakerFormat = SpeakerFormat.ADPCM;
+			maximize = true;
+			checkBoxMaximize.IsChecked = maximize;
+			if (speakerFormat == SpeakerFormat.ADPCM)
+				sampleRate = 3000;
+			else
+				sampleRate = 2000;
+			spinnerSampleRate.Value = sampleRate;
+			CheckBoxSpeakerFormat = speakerFormat;
+			//FIXME: UnpairOnDisconnect is broken on Windows 10, it'll cause
 			//       more problems than solve them at this point in time.
-			WiimoteManager.AutoConnect = false;// true;
+			WiimoteManager.UnpairOnDisconnect = false;// true;
+			WiimoteManager.PairOnDiscover = false;// true;
+			WiimoteManager.AutoConnect = true;
+			WiimoteManager.AutoDiscoveryCount = 1;
 			WiimoteManager.DolphinBarMode = true;
 			WiimoteManager.BluetoothMode = true;
-			WiimoteManager.AutoDiscoveryCount = 1;
 			WiimoteManager.Connected += OnWiimoteConnected;
 			WiimoteManager.Disconnected += OnWiimoteDisconnected;
 			UpdateBattery();
@@ -150,7 +176,7 @@ namespace WiimoteAudioPlayer {
 
 		private void OnWiimoteConnected(object sender, WiimoteEventArgs e) {
 			Dispatcher.Invoke(() => {
-				buttonPlayWiimote.IsEnabled = adpcm != null;
+				buttonPlayWiimote.IsEnabled = soundObj != null;
 				UpdateBattery();
 			});
 		}
@@ -179,61 +205,113 @@ namespace WiimoteAudioPlayer {
 			int newSampleRate = spinnerSampleRate.Value ?? sampleRate;
 			float newVolume = spinnerVolume.Value ?? volume;
 			bool newMaximize = checkBoxMaximize.IsChecked ?? maximize;
-			UpdateWaveFile(newSampleRate, newVolume, newMaximize);
+			SpeakerFormat newSpeakerFormat = CheckBoxSpeakerFormat;
+			UpdateWaveFile(newSampleRate, newVolume, newMaximize, newSpeakerFormat);
 		}
 
 		private void OnVolumeChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-			if (IsLoaded && adpcm != null) {
+			if (IsLoaded && soundObj != null) {
 				labelVolume.FontWeight = VolumeFontWeight;
 			}
 		}
 
 		private void OnMaximizeVolumeChanged(object sender, RoutedEventArgs e) {
-			if (IsLoaded && adpcm != null) {
+			if (IsLoaded && soundObj != null) {
 				checkBoxMaximize.FontWeight = MaximizeFontWeight;
 			}
 		}
 
-		private FontWeight VolumeFontWeight {
-			get => ((spinnerSampleRate.Value ?? 0) == sampleRate ? FontWeights.Bold : FontWeights.Regular);
+		private void OnADPCMChanged(object sender, RoutedEventArgs e) {
+			if (IsLoaded && soundObj != null) {
+				checkBoxADPCM.FontWeight = ADPCMFontWeight;
+			}
+		}
+		private SpeakerFormat CheckBoxSpeakerFormat {
+			get => ((checkBoxADPCM.IsChecked??true) ? SpeakerFormat.ADPCM : SpeakerFormat.PCM);
+			set => checkBoxADPCM.IsChecked = (value == SpeakerFormat.ADPCM);
 		}
 
 		private FontWeight SampleRateFontWeight {
-			get => ((spinnerVolume.Value ?? 0f) == volume ? FontWeights.Bold : FontWeights.Regular);
+			get => ((spinnerSampleRate.Value ?? 0) != sampleRate ? FontWeights.Bold : FontWeights.Regular);
+		}
+
+		private FontWeight VolumeFontWeight {
+			get => ((spinnerVolume.Value ?? 0f) != volume ? FontWeights.Bold : FontWeights.Regular);
 		}
 
 		private FontWeight MaximizeFontWeight {
-			get => ((checkBoxMaximize.IsChecked ?? true) == maximize ? FontWeights.Bold : FontWeights.Regular);
+			get => ((checkBoxMaximize.IsChecked ?? true) != maximize ? FontWeights.Bold : FontWeights.Regular);
 		}
 
-		private bool UpdateWaveFile(int newSampleRate, float newVolume, bool newMaximize) {
-			return UpdateWaveFile(convertedWaveFile, newSampleRate, newVolume, newMaximize);
+		private FontWeight ADPCMFontWeight {
+			get => (CheckBoxSpeakerFormat != speakerFormat ? FontWeights.Bold : FontWeights.Regular);
 		}
 
-		private bool UpdateWaveFile(string newConvertedWaveFile, int newSampleRate, float newVolume, bool newMaximize, bool alreadyStopped = false) {
+		private bool ConvertWaveFile(string newWaveFile, out string newConvertedWaveFile, bool forceConvert, int newSampleRate) {
+			if (forceConvert || newWaveFile != waveFile || newSampleRate != convertedSampleRate) {
+				ADPCMConverter.ConvertToValidWav(newWaveFile, out newConvertedWaveFile, ref newSampleRate);
+				waveFile = newWaveFile;
+				convertedWaveFile = newConvertedWaveFile;
+				convertedSampleRate = newSampleRate;
+				//labelFile.Content = "File: " + Path.GetFileName(waveFile);
+				//buttonPlayWave.IsEnabled = true;
+				//buttonPlayWiimote.IsEnabled = WiimoteManager.ConnectedWiimotes.Any();
+				//buttonStop.IsEnabled = true;
+				//buttonUpdateSampleRate.IsEnabled = true;
+				return true;
+			}
+			convertedWaveFile = waveFile;
+			newConvertedWaveFile = waveFile;
+			return false;
+		}
+
+		private bool UpdateWaveFile(int newSampleRate, float newVolume, bool newMaximize, SpeakerFormat newSpeakerFormat) {
+			return PrepareWaveFile(waveFile, newSampleRate, newVolume, newMaximize, newSpeakerFormat, false);
+		}
+
+		//private bool UpdateWaveFile(string newConvertedWaveFile, int newSampleRate, float newVolume, bool newMaximize, bool shouldStop = false) {
+		private bool PrepareWaveFile(string newWaveFile, int newSampleRate, float newVolume, bool newMaximize, SpeakerFormat newSpeakerFormat, bool forceConvert = true, bool stop = true) {
+			if (stop) {
+				player.Close();
+				Wiimote?.StopSound();
+				waveform.Stop();
+				Thread.Sleep(300);
+			}
+			
 			try {
-				if (!alreadyStopped) {
-					player.Close();
-					Wiimote?.StopSound();
-					waveform.Stop();
-					Thread.Sleep(300);
-				}
-
+				string newConvertedWaveFile;
+				ConvertWaveFile(newWaveFile, out newConvertedWaveFile, /*forceConvert*/true, newSampleRate);
 				string newFinalWaveFile = newConvertedWaveFile;
 				if (newMaximize)
 					ADPCMConverter.MaximizeWavVolume(newConvertedWaveFile, out newFinalWaveFile);
-				byte[] data = ADPCMConverter.Wav2ADPCMData(newFinalWaveFile, out newSampleRate);
+				object newSoundObj = null;
+				byte[] data = null;
+				if (newSpeakerFormat == SpeakerFormat.ADPCM) {
+					//newSoundObj = WiiRemoteJAudioConverter.bufferADPCMSound(newFinalWaveFile);
+					data = ADPCMConverter.Wav2ADPCMData(newFinalWaveFile, out newSampleRate);
+				}
+				else {
+					data = ADPCMConverter.Wav2PCMs8Data(newFinalWaveFile, out newSampleRate);
+					//throw new NotSupportedException("8-bit signed PCM not supported yet!");
+					//newSoundObj = WiiRemoteJAudioConverter.bufferPCMs8Sound(newFinalWaveFile);
+					//data = ADPCMConverter.Wav2PCMs8Data(newFinalWaveFile, out newSampleRate);
+					//TODO: We probably dont need to previous step, it'll make things more complicated
+				}
 				player.Open(new Uri(newFinalWaveFile));
 				waveform.InitWave(newFinalWaveFile);
-				adpcm = data;
+				soundObj = newSoundObj ?? data;
+				//soundObj = newSoundObj;
+				//soundData = data;
 				convertedWaveFile = newConvertedWaveFile;
 				finalWaveFile = newFinalWaveFile;
 				sampleRate = newSampleRate;
 				volume = newVolume;
 				maximize = newMaximize;
+				speakerFormat = newSpeakerFormat;
 				labelSampleRate.FontWeight = SampleRateFontWeight;
 				labelVolume.FontWeight = VolumeFontWeight;
 				checkBoxMaximize.FontWeight = MaximizeFontWeight;
+				checkBoxADPCM.FontWeight = ADPCMFontWeight;
 				return true;
 			}
 			catch (Exception ex) {

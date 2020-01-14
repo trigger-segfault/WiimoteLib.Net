@@ -18,6 +18,7 @@ namespace WiimoteLib {
 		// Settings
 		private static int autoDiscoveryCount;
 		private static bool unpairOnDisconnect;
+		private static bool pairOnDiscover;
 		private static bool autoConnect;
 		//private static TimeSpan disconnectTimeout;
 		private static WiimoteType allowedTypes;
@@ -55,6 +56,7 @@ namespace WiimoteLib {
 			autoDiscoveryCount = 0;
 			autoConnect = false;
 			unpairOnDisconnect = true;
+			pairOnDiscover = true;
 			maxWriteFrequency = 15;//20;
 			driverInstallDelay = 3000;
 			writeQueue = new Queue<WriteRequest>();
@@ -281,6 +283,10 @@ namespace WiimoteLib {
 		public static bool UnpairOnDisconnect {
 			get => unpairOnDisconnect;
 			set => unpairOnDisconnect = value;
+		}
+		public static bool PairOnDiscover {
+			get => pairOnDiscover;
+			set => pairOnDiscover = value;
 		}
 
 		/// <summary>Discovered devices will automatically connect instead of raising
